@@ -11,6 +11,5 @@ class User(Base):
     name = Column(VARCHAR(4), nullable=True)
     school = Column(VARCHAR(16), nullable=True)
     password = Column(VARCHAR(60), nullable=True)
-    count = Column(Integer, nullable=True)
     post = relationship("Post", cascade="all,delete", backref="user")
 

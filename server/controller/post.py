@@ -14,7 +14,7 @@ s3 = s3_connection()
 
 def post(title, content, category, id):
     with session_scope() as session:
-        name = title
+        name = Post.id
         s3_put_object(s3, AWS_S3_BUCKET_NAME, "./temp", name)
         location = s3.get_bucket_location(Bucket=AWS_S3_BUCKET_NAME)['LocationConstraint']
         image_url = f'https://{AWS_S3_BUCKET_NAME}.s3.{location}.amazonaws.com/{name}'
@@ -55,7 +55,7 @@ def allget():
                            "content": content,
                            "category": category,
                            "image": image,
-                           "created_at": create_at,
+                           "created_at": str(create_at),
                            "user": user
                        } for id, title, content, category, image, create_at, user in posts]
                    }, 200
@@ -70,6 +70,7 @@ def get(id):
             Post.content,
             Post.category,
             Post.image,
+            Post.create_at,
             User.id
         ).join(User, User.id == Post.userId).filter(Post.id == id)
 
@@ -80,8 +81,9 @@ def get(id):
                            "content": content,
                            "category": category,
                            "image": image,
+                           "create_at": str(create_at),
                            "user": user
-                       } for title, content, category, image, user in posts]
+                       } for title, content, category, image, create_at, user in posts]
                    }, 200
 
         return abort(404, "Not Found")

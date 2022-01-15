@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from server.model.user import User
 
 
-def signup(id, name, password, school, count):
+def signup(id, name, password, school):
     with session_scope() as session:
         user = session.query(User).filter(User.id == id).first()
         if not user:
@@ -14,8 +14,7 @@ def signup(id, name, password, school, count):
                 id=id,
                 name=name,
                 password=generate_password_hash(password),
-                school=school,
-                count=count
+                school=school
             )
             session.add(new_sigup)
             session.commit()

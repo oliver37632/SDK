@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from server.controller.post import post,get,allget
+from server.controller.post import post, get, allget, SearchCategory
 
 from datetime import datetime
 
@@ -36,7 +36,12 @@ class GetPost(Resource):
             id=id
         )
 
-class Ping(Resource):
-    def get(self):
-        return pong
+
+class Category(Resource):
+    def post(self):
+        category = request.json["category"]
+
+        return SearchCategory(
+            category=category
+        )
 

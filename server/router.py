@@ -16,5 +16,5 @@ api_basic.add_resource(SignUp, "/signup")
 from server.view.auth import Login
 api_basic.add_resource(Login, "/login")
 
-from server.view.post import Ping
-api_basic.add_resource(Ping,"/")
+from server.view.post import Category
+api_basic.add_resource(Category, "/post/category")

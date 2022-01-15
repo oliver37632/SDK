@@ -85,3 +85,27 @@ def get(id):
                    }, 200
 
         return abort(404, "Not Found")
+
+
+def SearchCategory(category):
+    with session_scope() as session:
+        posts = session.query(
+            Post.id,
+            Post.title,
+            Post.content,
+            Post.image,
+            User.id
+        ).join(User, User.id == Post.userId).filter(Post.category == category)
+
+        if posts:
+            return {   "category": category,
+                       "posts": [{
+                           "id": id,
+                           "title": title,
+                           "content": content,
+                           "image": image,
+                           "user": user
+                       } for id, title, content, image, user in posts]
+                   }, 200
+
+        return abort(404, "Not Found")

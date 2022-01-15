@@ -9,14 +9,13 @@ class SignUp(Resource):
         name = request.json['name']
         password = request.json['password']
         school= request.json['school']
-        count = 0
+
         return signup(
                 id=id,
                 name=name,
                 password=password,
-                school=school,
-                count=count
-                     )
+                school=school
+        )
 
 
 class Login(Resource):

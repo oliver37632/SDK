@@ -2,7 +2,7 @@ from server.model import session_scope
 from server.model.post import Post
 from server.model.user import User
 
-from flask import abort, request
+from flask import abort
 
 from server.model.S3 import s3_put_object, s3_connection
 from server.config import AWS_S3_BUCKET_NAME
@@ -18,14 +18,12 @@ def post(title, content, category, id):
         s3_put_object(s3, AWS_S3_BUCKET_NAME, "./temp", name)
         location = s3.get_bucket_location(Bucket=AWS_S3_BUCKET_NAME)['LocationConstraint']
         image_url = f'https://{AWS_S3_BUCKET_NAME}.s3.{location}.amazonaws.com/{name}'
-        count = User.count+1
         new_post = Post(
             title=title,
             content=content,
             category=category,
             image=image_url,
             id=id,
-            create_at=datetime.now(),
             userId=id
         )
 
@@ -45,6 +43,7 @@ def allget():
             Post.content,
             Post.category,
             Post.image,
+            Post.create_at,
             User.id
         ).join(User, User.id == Post.userId)
 
@@ -56,8 +55,9 @@ def allget():
                            "content": content,
                            "category": category,
                            "image": image,
+                           "created_at": create_at,
                            "user": user
-                       } for id, title, content, category, image, user in posts]
+                       } for id, title, content, category, image, create_at, user in posts]
                    }, 200
 
         return abort(404, "Not Found")

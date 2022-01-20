@@ -100,7 +100,8 @@ def SearchCategory(category):
         ).join(User, User.id == Post.userId).filter(Post.category == category)
 
         if posts:
-            return {   "category": category,
+            return {
+                       "category": category,
                        "posts": [{
                            "id": id,
                            "title": title,
